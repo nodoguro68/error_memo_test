@@ -1,5 +1,6 @@
 <?php
 
+// ユーザー登録
 function createUser($user_name, $mail_address, $password)
 {
     try {
@@ -19,11 +20,53 @@ function createUser($user_name, $mail_address, $password)
             $_SESSION['login_date'] = time();
             $_SESSION['login_limit'] = $session_limit;
             $_SESSION['user_id'] = $dbh->lastInsertId();
-
         }
-
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
         $err_msg['common'] = ERR_MSG;
+    }
+}
+
+// メールアドレスでユーザーのidとパスワードを取得
+function getUserDataByMailAddress($mail_address)
+{
+
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT id, password FROM users WHERE mail_address = :mail_address AND is_deleted = 0';
+        $data = array(':mail_address' => $mail_address);
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+// ログイン
+function login($mail_address, $password, $pass_save)
+{
+
+    $user_data = getUserDataByMailAddress($mail_address);
+
+    if (!empty($user_data) && password_verify($password, $user_data['password'])) {
+
+        $sesLimit = 60 * 60;
+        $_SESSION['login_date'] = time();
+
+        if ($pass_save) {
+            $_SESSION['login_limit'] = $sesLimit * 24 * 30;
+        } else {
+            $_SESSION['login_limit'] = $sesLimit;
+        }
+        $_SESSION['user_id'] = $user_data['id'];
+
+        return true;
+    } else {
+        $err_msg['common'] = ERR_MSG_LOGIN;
     }
 }
