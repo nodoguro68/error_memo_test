@@ -110,3 +110,49 @@ function updatePass($user_id, $new_password)
         $err_msg['common'] = ERR_MSG;
     }
 }
+
+// プロフィール取得
+function getProfileData($user_id)
+{
+    try {
+
+        $dbh = dbConnect();
+        $sql = 'SELECT user_name, description, mail_address, profile_img, github, facebook, twitter FROM users WHERE id = :id AND is_deleted = 0';
+        $data = array(':id' => $user_id);
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+// プロフィール更新
+function updateProfile($user_id, $user_name, $description, $mail_address, $profile_img, $github, $facebook, $twitter)
+{
+    try {
+
+        $dbh = dbConnect();
+        $sql = 'UPDATE users SET user_name = :user_name, description = :description, mail_address = :mail_address, profile_img = :profile_img, github = :github, facebook = :facebook, twitter = :twitter WHERE id = :id AND is_deleted = 0';
+        $data = array(
+            ':id' => $user_id,
+            ':user_name' => $user_name,
+            ':description' => $description,
+            ':mail_address' => $mail_address,
+            ':profile_img' => $profile_img,
+            ':github' => $github,
+            ':facebook' => $facebook,
+            ':twitter' => $twitter,
+        );
+
+        if (queryPost($dbh, $sql, $data)) {
+
+            return true;
+        }
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
