@@ -3,6 +3,7 @@
 require_once '../common/common.php';
 require_once '../common/validation.php';
 require_once '../function/user.php';
+require_once '../common/auth.php';
 
 if (!empty($_POST)) {
     $mail_address = filter_input(INPUT_POST, 'mail_address');

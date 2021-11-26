@@ -2,7 +2,7 @@
 
 require_once '../common/common.php';
 require_once '../function/user.php';
-
+require_once '../common/auth.php';
 
 
 $page_title = 'マイページ';
