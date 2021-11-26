@@ -70,3 +70,43 @@ function login($mail_address, $password, $pass_save)
         $err_msg['common'] = ERR_MSG_LOGIN;
     }
 }
+
+// パスワード取得
+function getPassword($user_id)
+{
+    try {
+
+        $dbh = dbConnect();
+        $sql = 'SELECT password FROM users WHERE id = :id AND is_deleted = 0';
+        $data = array(':id' => $user_id);
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+// パスワード更新
+function updatePass($user_id, $new_password)
+{
+    try {
+
+        $dbh = dbConnect();
+        $sql = 'UPDATE users SET password = :password WHERE id = :id AND is_deleted = 0';
+        $data = array(
+            ':id' => $user_id,
+            ':password' => password_hash($new_password, PASSWORD_DEFAULT),
+        );
+
+        if (queryPost($dbh, $sql, $data)) {
+
+            return true;
+        }
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}

@@ -12,7 +12,11 @@ include '../template/header.php';
 
 <main class="main">
     <div class="container">
-
+        <ul class="">
+            <li class=""><a href="profile.php" class="">プロフィール編集</a></li>
+            <li class=""><a href="edit_pass.php" class="">パスワード変更</a></li>
+            <li class=""><a href="signout.php" class="">退会</a></li>
+        </ul>
     </div>
 
 </main>

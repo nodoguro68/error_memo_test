@@ -11,6 +11,7 @@ define('ERR_MSG_EMAIL', 'メールアドレスの形式が違います');
 define('ERR_MSG_HALF', '半角英数字で入力してください');
 define('ERR_MSG_PASS_RE', 'パスワードの再入力が違います');
 define('ERR_MSG_OLD_PASS', '古いパスワードが違います');
+define('ERR_MSG_NEW_PASS', '古いパスワードと同じです');
 define('ERR_MSG_LOGIN', 'メールアドレスまたはパスワードが違います');
 define('SUC_MSG_LOGIN', 'ログインしました');
 define('SUC_MSG_MAIL', 'メールを送信しました');

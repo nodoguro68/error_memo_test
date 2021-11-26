@@ -109,3 +109,22 @@ function validPass($str, $key)
     validMaxLen($str, $key);
     validMinLen($str, $key);
 }
+
+// 古いパスワード認証
+function validPassVerify($user_id, $old_pass, $key)
+{
+    $user_data = getPassword($user_id);
+    if (!password_verify($old_pass, $user_data['password'])) {
+        global $err_msg;
+        $err_msg[$key] = ERR_MSG_OLD_PASS;
+    }
+}
+
+// 古いパスワードと新しいパスワードが同じかチェック
+function validNewPass($old_pass,$new_pass)
+{
+    if ($old_pass === $new_pass) {
+        global $err_msg;
+        $err_msg['new_password'] = ERR_MSG_NEW_PASS;
+    }
+}
