@@ -16,7 +16,7 @@ if (!empty($_POST)) {
     if (empty($err_msg)) {
 
         validMaxLen($mail_address, 'mail_address');
-        validEmail($mail_address);
+        validMail($mail_address);
 
         validPass($password, 'password');
 

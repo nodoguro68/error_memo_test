@@ -20,8 +20,8 @@ if (!empty($_POST)) {
         validUserNameDup($user_name);
 
         validMaxLen($mail_address, 'mail_address');
-        validEmail($mail_address);
-        validEmailDup($mail_address);
+        validMail($mail_address);
+        validMailDup($mail_address);
 
         validMatch($password, $password_re, 'password');
         validPass($password, 'password');

@@ -16,7 +16,7 @@ function validMaxLen($str, $key, $max = 256)
 {
     if (mb_strlen($str) > $max) {
         global $err_msg;
-        $err_msg[$key] = $max.ERR_MSG_MAX_LEN;
+        $err_msg[$key] = $max . ERR_MSG_MAX_LEN;
     }
 }
 
@@ -25,7 +25,7 @@ function validMinLen($str, $key, $min = 8)
 {
     if (mb_strlen($str) < $min) {
         global $err_msg;
-        $err_msg[$key] = $min.ERR_MSG_MIN_LEN;
+        $err_msg[$key] = $min . ERR_MSG_MIN_LEN;
     }
 }
 
@@ -53,7 +53,7 @@ function validUserNameDup($user_name)
 }
 
 // メールアドレス形式チェック
-function validEmail($str)
+function validMail($str)
 {
     if (!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $str)) {
         global $err_msg;
@@ -62,7 +62,7 @@ function validEmail($str)
 }
 
 // メールアドレス重複チェック
-function validEmailDup($mail_address)
+function validMailDup($mail_address)
 {
 
     global $err_msg;
@@ -121,7 +121,7 @@ function validPassVerify($user_id, $old_pass, $key)
 }
 
 // 古いパスワードと新しいパスワードが同じかチェック
-function validNewPass($old_pass,$new_pass)
+function validNewPass($old_pass, $new_pass)
 {
     if ($old_pass === $new_pass) {
         global $err_msg;
