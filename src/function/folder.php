@@ -21,3 +21,23 @@ function createFolder($user_id, $folder)
         $err_msg['common'] = ERR_MSG;
     }
 }
+
+// フォルダ一覧取得
+function getFolders($user_id)
+{
+
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT id, title FROM folders WHERE user_id = :user_id AND is_deleted = 0';
+        $data = array(':user_id' => $user_id);
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}

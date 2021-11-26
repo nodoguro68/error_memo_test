@@ -7,6 +7,7 @@ require_once '../function/user.php';
 require_once '../function/folder.php';
 
 $user_id = $_SESSION['user_id'];
+$folders = getFolders($user_id);
 
 if (!empty($_POST['create_folder'])) {
 
@@ -35,6 +36,14 @@ include '../template/header.php';
             <li class=""><a href="profile.php" class="">プロフィール編集</a></li>
             <li class=""><a href="edit_pass.php" class="">パスワード変更</a></li>
             <li class=""><a href="signout.php" class="">退会</a></li>
+        </ul>
+
+        <ul class="">
+            <?php if (!empty($folders)) : ?>
+                <?php foreach ($folders as $folder) : ?>
+                    <li class=""><a href="mypage.php?folder_id=<?= sanitize($folder['id']); ?>" class=""><?= sanitize($folder['title']); ?><span class=""></span></a></li>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </ul>
 
         <form method="post" class="">
