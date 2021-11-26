@@ -1,6 +1,6 @@
 <?php
 
-require_once 'messeage.php';
+require_once 'message.php';
 
 // 入力チェック
 function validRequired($str, $key)
@@ -16,7 +16,7 @@ function validMaxLen($str, $key, $max = 256)
 {
     if (mb_strlen($str) > $max) {
         global $err_msg;
-        $err_msg[$key] = ERR_MSG_MAX_LEN;
+        $err_msg[$key] = $max.ERR_MSG_MAX_LEN;
     }
 }
 
@@ -25,7 +25,7 @@ function validMinLen($str, $key, $min = 8)
 {
     if (mb_strlen($str) < $min) {
         global $err_msg;
-        $err_msg[$key] = ERR_MSG_MIN_LEN;
+        $err_msg[$key] = $min.ERR_MSG_MIN_LEN;
     }
 }
 
@@ -53,11 +53,11 @@ function validUserNameDup($user_name)
 }
 
 // メールアドレス形式チェック
-function validEmail($str, $key)
+function validEmail($str)
 {
     if (!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $str)) {
         global $err_msg;
-        $err_msg[$key] = ERR_MSG_EMAIL;
+        $err_msg['mail_address'] = ERR_MSG_EMAIL;
     }
 }
 

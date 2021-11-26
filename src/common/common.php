@@ -42,7 +42,7 @@ function dbConnect()
 {
 
     try {
-        $dsn = 'mysql:dbname=error_memo;host=127.0.0.1;charset=utf8';
+        $dsn = 'mysql:dbname=error_memo;host=localhost;charset=utf8';
         $user = 'root';
         $password = 'root';
         $options = array(
