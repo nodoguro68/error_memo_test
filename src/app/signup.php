@@ -20,7 +20,7 @@ if (!empty($_POST)) {
         validUserNameDup($user_name);
 
         validMaxLen($mail_address, 'mail_address');
-        // validEmail($mail_address);
+        validEmail($mail_address);
         validEmailDup($mail_address);
 
         validMatch($password, $password_re, 'password');
@@ -35,8 +35,8 @@ if (!empty($_POST)) {
 }
 
 $page_title = 'ユーザー登録';
-require_once '../template/head.php';
-require_once '../template/header.php';
+include '../template/head.php';
+include '../template/header.php';
 ?>
 
 <main class="main">
@@ -55,12 +55,12 @@ require_once '../template/header.php';
                 </div>
                 <div class="form__item">
                     <label for="password" class="form__label">パスワード<span class="form__note">半角英数字8文字以上</span></label>
-                    <input type="text" name="password" class="form__input" id="password" value="<?= getFormData('password'); ?>">
+                    <input type="password" name="password" class="form__input" id="password" value="<?= getFormData('password'); ?>">
                     <span class="err-msg"><?= getErrMsg('password'); ?></span>
                 </div>
                 <div class="form__item">
                     <label for="password_re" class="form__label">パスワード（確認）</label>
-                    <input type="text" name="password_re" class="form__input" id="password_re" value="<?= getFormData('password_re'); ?>">
+                    <input type="password" name="password_re" class="form__input" id="password_re" value="<?= getFormData('password_re'); ?>">
                     <span class="err-msg"><?= getErrMsg('password_re'); ?></span>
                 </div>
             </div>
@@ -68,11 +68,16 @@ require_once '../template/header.php';
                 <div class="">
                     <input type="submit" value="登録" class="btn">
                 </div>
+                <div class="link-container">
+                    <a href="login.php" class="form__link">ログインはこちら</a>
+                </div>
             </div>
         </form>
     </div>
 
 </main>
+<?php include '../template/footer.php' ?>
+
 </body>
 
 </html>
