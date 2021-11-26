@@ -128,3 +128,23 @@ function validNewPass($old_pass, $new_pass)
         $err_msg['new_password'] = ERR_MSG_NEW_PASS;
     }
 }
+
+// フォルダ重複チェック
+function validFolderDup($user_id, $folder)
+{
+    global $err_msg;
+
+    $dbh = dbConnect();
+    $sql = 'SELECT count(*) FROM folders WHERE user_id = :user_id AND title = :title AND is_deleted = 0';
+    $data = array(
+        ':title' => $folder,
+        ':user_id' => $user_id
+    );
+
+    $stmt = queryPost($dbh, $sql, $data);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!empty(array_shift($result))) {
+        $err_msg['create_folder'] = ERR_MSG_DUP;
+    }
+}
