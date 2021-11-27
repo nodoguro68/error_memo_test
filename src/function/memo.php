@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // メモ登録
 function createMemo($memo_data)
@@ -46,7 +46,91 @@ function getMyMemo($memo_id, $user_id)
         $stmt = queryPost($dbh, $sql, $data);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
 
+// 全てのメモ取得
+function getMemos()
+{
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT id, title FROM memos WHERE is_published = 1 AND is_deleted = 0';
+        $stmt = $dbh->query($sql);
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+
+// フォルダ内のメモ取得
+function getMemoInFolder($user_id, $folder_id)
+{
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT id, title, is_published FROM memos WHERE user_id = :user_id AND folder_id = :folder_id AND is_deleted = 0';
+        $data = array(
+            ':user_id' => $user_id,
+            ':folder_id' => $folder_id,
+        );
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+
+// 未解決のメモ取得
+function getUnsolvedMemos($user_id)
+{
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT id, title FROM memos WHERE user_id = :user_id AND is_solved = 0 AND is_deleted = 0';
+        $data = array(
+            ':user_id' => $user_id,
+        );
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+
+// 未解決のメモ取得
+function getSolvedMemos($user_id)
+{
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT id, title, is_published FROM memos WHERE user_id = :user_id AND is_solved = 1 AND is_deleted = 0';
+        $data = array(
+            ':user_id' => $user_id,
+        );
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
         $err_msg['common'] = ERR_MSG;

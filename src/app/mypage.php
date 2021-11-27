@@ -5,9 +5,13 @@ require_once '../common/auth.php';
 require_once '../common/validation.php';
 require_once '../function/user.php';
 require_once '../function/folder.php';
+require_once '../function/memo.php';
 
 $user_id = $_SESSION['user_id'];
 $folders = getFolders($user_id);
+$unsolved_memos = getUnsolvedMemos($user_id);
+$solved_memos = getSolvedMemos($user_id);
+
 
 if (!empty($_GET['folder_id'])) {
 
@@ -15,6 +19,8 @@ if (!empty($_GET['folder_id'])) {
     $folder = getFolder($folder_id, $user_id);
     $delete_folder_id = $folder['id'];
     $selected_folder_title = $folder['title'];
+
+    $memos = getMemoInFolder($user_id, $folder_id);
 }
 
 if (!empty($_POST['create_folder'])) {
@@ -81,9 +87,39 @@ include '../template/header.php';
                     <h2>フォルダが選択されていません</h2>
                 <?php endif; ?>
             </div>
-            <div class="section__body"></div>
+            <div class="section__body">
+                <ul class="memo-list">
+                    <?php if (!empty($memos)) : ?>
+                        <?php foreach ($memos as $memo) : ?>
+                            <li class="memo-list__item"><a href="memo_form.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']); ?></a></li>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <li>メモがありません</li>
+                    <?php endif; ?>
+                </ul>
+            </div>
             <div class="section__footer"></div>
         </section>
+
+        <ul class="memo-list">
+            <?php if (!empty($unsolved_memos)) : ?>
+                <?php foreach ($unsolved_memos as $memo) : ?>
+                    <li class="memo-list__item"><a href="memo_form.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']); ?></a></li>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <li>メモがありません</li>
+            <?php endif; ?>
+        </ul>
+
+        <ul class="memo-list">
+            <?php if (!empty($solved_memos)) : ?>
+                <?php foreach ($solved_memos as $memo) : ?>
+                    <li class="memo-list__item"><a href="memo_form.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']); ?></a></li>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <li>メモがありません</li>
+            <?php endif; ?>
+        </ul>
 
         <a href="memo_form.php?folder_id=<?= sanitize($folder_id); ?>" class="">メモを追加する</a>
     </div>
