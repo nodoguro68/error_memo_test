@@ -148,3 +148,21 @@ function validFolderDup($user_id, $folder)
         $err_msg['create_folder'] = ERR_MSG_DUP;
     }
 }
+
+// 解決方法が入力された状態で解決済みにしているかどうか
+function validSolved($solution, $is_solved)
+{
+    if (empty($solution) && $is_solved === '1') {
+        global $err_msg;
+        $err_msg['is_solved'] = ERR_MSG_SOLVED;
+    }
+}
+
+// 解決済みにした状態で公開を選択しているかどうか
+function validPublished($is_published, $is_solved)
+{
+    if ($is_published === '1' && $is_solved === '0') {
+        global $err_msg;
+        $err_msg['is_published'] = ERR_MSG_PUBLISH;
+    }
+}

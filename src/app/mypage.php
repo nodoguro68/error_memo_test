@@ -28,8 +28,8 @@ if (!empty($_POST['create_folder'])) {
 
         $folder_id = createFolder($user_id, $folder);
 
-        if(!empty($folder_id)) {
-            header('Location: mypage.php?folder_id='.$folder_id);
+        if (!empty($folder_id)) {
+            header('Location: mypage.php?folder_id=' . $folder_id);
         }
     }
 }
@@ -84,6 +84,8 @@ include '../template/header.php';
             <div class="section__body"></div>
             <div class="section__footer"></div>
         </section>
+
+        <a href="memo_form.php?folder_id=<?= sanitize($folder_id); ?>" class="">メモを追加する</a>
     </div>
 
 </main>
