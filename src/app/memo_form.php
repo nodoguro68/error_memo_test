@@ -16,6 +16,7 @@ $categories = getCategories();
 if (!empty($_POST)) {
 
     $memo_data = array(
+        'id' => $memo_id,
         'user_id' => $user_id,
         'folder_id' => $folder_id,
         'category_id' => $_POST['category_id'],
@@ -31,35 +32,39 @@ if (!empty($_POST)) {
 
     if ($editFlag) {
 
-        if($db_form_data['title'] !== $memo_data['title']) {
+        if ($db_form_data['title'] !== $memo_data['title']) {
             validRequired($memo_data['title'], 'title');
+        }
+        if ($db_form_data['is_published'] !== $memo_data['is_published']) {
+            validPublished($memo_data['is_published'], $memo_data['is_solved']);
+        }
+        if ($db_form_data['is_solved'] !== $memo_data['is_solved']) {
+            validSolved($memo_data['solution'], $memo_data['is_solved']);
+        }
+        if ($db_form_data['solution'] !== $memo_data['solution']) {
+            validSolved($memo_data['solution'], $memo_data['is_solved']);
         }
 
         if (empty($err_msg)) {
 
-            // header('Location: mypage.php?folder_id=' . $folder_id);
+            if (editMemo($memo_data)) {
+                header('Location: mypage.php?folder_id=' . $folder_id);
+            }
         }
-        
     } else {
-        
+
         validRequired($memo_data['title'], 'title');
         validPublished($memo_data['is_published'], $memo_data['is_solved']);
         validSolved($memo_data['solution'], $memo_data['is_solved']);
-        
 
-        if(empty($err_msg)) {
 
-            if(createMemo($memo_data)) {
-                header('Location: mypage.php?folder_id='.$folder_id);
+        if (empty($err_msg)) {
 
+            if (createMemo($memo_data)) {
+                header('Location: mypage.php?folder_id=' . $folder_id);
             }
-
         }
-
     }
-    
-
-
 }
 
 $page_title = ($editFlag) ? 'メモ編集' : 'メモ新規登録';
@@ -86,13 +91,13 @@ include '../template/header.php';
                 </div>
                 <!-- 公開するかどうか -->
                 <div class="form__item">
-                    <label for="private" class="form__label">非公開</label><input type="radio" name="is_published" value="0" id="private" <?php if (getFormData('is_published') === '0' || getFormData('is_published')=== null) echo 'checked'; ?>>
+                    <label for="private" class="form__label">非公開</label><input type="radio" name="is_published" value="0" id="private" <?php if (getFormData('is_published') === '0' || getFormData('is_published') === null) echo 'checked'; ?>>
                     <label for="public" class="form__label">公開</label><input type="radio" name="is_published" value="1" id="public" <?php if (getFormData('is_published') === '1') echo 'checked'; ?>>
                     <span class="err-msg"><?= getErrMsg('is_published'); ?></span>
                 </div>
                 <!-- 解決済みかどうか -->
                 <div class="form__item">
-                    <label for="unsolved" class="form__label">未解決</label><input type="radio" name="is_solved" value="0" id="unsolved" <?php if (getFormData('is_solved') === '0'| getFormData('is_solved') === null) echo 'checked'; ?>>
+                    <label for="unsolved" class="form__label">未解決</label><input type="radio" name="is_solved" value="0" id="unsolved" <?php if (getFormData('is_solved') === '0' | getFormData('is_solved') === null) echo 'checked'; ?>>
                     <label for="solved" class="form__label">解決済み</label><input type="radio" name="is_solved" value="1" id="solved" <?php if (getFormData('is_solved') === '1') echo 'checked'; ?>>
                     <span class="err-msg"><?= getErrMsg('is_solved'); ?></span>
                 </div>

@@ -121,7 +121,9 @@ include '../template/header.php';
             <?php endif; ?>
         </ul>
 
-        <a href="memo_form.php?folder_id=<?= sanitize($folder_id); ?>" class="">メモを追加する</a>
+        <?php if(!empty($folder_id)): ?>
+            <a href="memo_form.php?folder_id=<?= sanitize($folder_id); ?>" class="">メモを追加する</a>
+        <?php endif; ?>
     </div>
 
 </main>
