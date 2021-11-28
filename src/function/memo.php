@@ -52,6 +52,32 @@ function getMyMemo($memo_id, $user_id)
     }
 }
 
+// メモ詳細取得
+function getMemo($memo_id)
+{
+    try {
+
+        $dbh = dbConnect();
+        $sql = 'SELECT m.id, user_id, m.title, ideal, attempt, solution, reference, etc, m.created_at, is_solved, is_published, c.title AS category_title, user_name, profile_img
+        FROM memos AS m 
+        INNER JOIN categories AS c 
+        ON m.category_id = c.id 
+        INNER JOIN users AS u
+        ON m.user_id = u.id
+        WHERE m.id = :memo_id AND m.is_published = 1 AND m.is_deleted = 0';
+        $data = array(
+            ':memo_id' => $memo_id,
+        );
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
 // 全てのメモ取得
 function getMemos()
 {

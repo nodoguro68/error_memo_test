@@ -1,0 +1,54 @@
+<?php
+
+require_once '../common/common.php';
+require_once '../function/memo.php';
+
+if (!empty($_GET['memo_id'])) {
+
+    $memo_id = filter_input(INPUT_GET, 'memo_id');
+    $memo = getMemo($memo_id);
+    $created_at = substr(sanitize($memo['created_at']), 0, 10);
+}
+
+
+$page_title = 'メモ詳細ページ';
+require_once '../template/head.php';
+require_once '../template/header.php';
+?>
+
+<main class="main">
+    <div class="container">
+        <div class="link__container">
+            <a href="index.php" class="link">戻る</a>
+        </div>
+
+        <section class="section">
+            <a href="user_detail.php?user_id=<?= sanitize($memo['user_id']); ?>"><img src="<?= sanitize($memo['profile_img']); ?>" alt="プロフィール画像" class=""></a>
+            <p class=""><?= sanitize($memo['user_name']); ?></p>
+        </section>
+
+        <section class="section">
+            <div class="section__header">
+                <h2><?= sanitize($memo['title']); ?></h2>
+                <span class="date"><?= $created_at; ?></span>
+                <span class="category"><?= sanitize($memo['category_title']); ?></span>
+            </div>
+            <div class="section_body">
+                <p><?= sanitize($memo['ideal']); ?></p>
+                <p><?= sanitize($memo['attempt']); ?></p>
+                <p><?= sanitize($memo['solution']); ?></p>
+                <p><?= sanitize($memo['reference']); ?></p>
+                <p><?= sanitize($memo['etc']); ?></p>
+            </div>
+            <div class="section_footer">
+
+            </div>
+        </section>
+    </div>
+
+</main>
+
+<script src="../resource/js/bundle.js"></script>
+</body>
+
+</html>
