@@ -157,14 +157,18 @@ function getMemos()
 
         $dbh = dbConnect();
 
-        $sql = 'SELECT id, title FROM memos WHERE is_published = 1 AND is_deleted = 0';
+        $sql = 'SELECT m.id, user_id, title, m.created_at AS created_at, user_name 
+        FROM memos AS m
+        INNER JOIN users AS u
+        ON m.user_id = u.id 
+        WHERE is_published = 1 AND m.is_deleted = 0';
         $stmt = $dbh->query($sql);
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
-        $err_msg['common'] = ERR_MSG;
+        // $err_msg['common'] = ERR_MSG;
     }
 }
 

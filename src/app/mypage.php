@@ -11,7 +11,7 @@ $user_id = $_SESSION['user_id'];
 $folders = getFolders($user_id);
 $unsolved_memos = getUnsolvedMemos($user_id);
 $solved_memos = getSolvedMemos($user_id);
-
+$user_info = getUserInfo($user_id);
 
 if (!empty($_GET['folder_id'])) {
 
@@ -62,6 +62,11 @@ include '../template/header.php';
             <li class=""><a href="edit_pass.php" class="">パスワード変更</a></li>
             <li class=""><a href="signout.php" class="">退会</a></li>
         </ul>
+
+        <div class="user-info">
+            <img src="<?= sanitize($user_info['profile_img']); ?>" alt="プロフィール画像" class="">
+            <p class=""><?= sanitize($user_info['user_name']); ?></p>
+        </div>
 
         <ul class="">
             <?php if (!empty($folders)) : ?>

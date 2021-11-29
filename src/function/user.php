@@ -156,3 +156,22 @@ function updateProfile($user_id, $user_name, $description, $mail_address, $profi
         $err_msg['common'] = ERR_MSG;
     }
 }
+
+
+// ユーザー情報取得
+function getUserInfo($user_id)
+{
+    try {
+
+        $dbh = dbConnect();
+        $sql = 'SELECT user_name, description, profile_img FROM users WHERE id = :user_id AND is_deleted = 0';
+        $data = array(':user_id' => $user_id);
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
