@@ -50,6 +50,7 @@ function getUserDataByMailAddress($mail_address)
 // ログイン
 function login($mail_address, $password, $pass_save)
 {
+    global $err_msg;
 
     $user_data = getUserDataByMailAddress($mail_address);
 
@@ -67,7 +68,7 @@ function login($mail_address, $password, $pass_save)
 
         return true;
     } else {
-        $err_msg['common'] = ERR_MSG_LOGIN;
+        $err_msg['common'] = ERR_MSG_AUTH;
     }
 }
 
@@ -171,6 +172,40 @@ function getUserInfo($user_id)
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
     } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+// 退会
+function signout($user_id)
+{
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = array(
+            'folders' => 'UPDATE folders SET is_deleted = 1 WHERE user_id = :user_id AND is_deleted = 0',
+            'memos' => 'UPDATE memos SET is_deleted = 1 WHERE user_id = :user_id AND is_deleted = 0',
+            'favorite_memos' => 'UPDATE favorite_memos SET is_deleted = 1 WHERE user_id = :user_id AND is_deleted = 0',
+            'users' => 'UPDATE users SET is_deleted = 1 WHERE id = :user_id AND is_deleted = 0',
+        );
+        $data = array(
+            ':user_id' => $user_id,
+        );
+
+        $stmt1 = queryPost($dbh, $sql['folders'], $data);
+        $stmt2 = queryPost($dbh, $sql['memos'], $data);
+        $stmt3 = queryPost($dbh, $sql['favorite_memos'], $data);
+        $stmt4 = queryPost($dbh, $sql['users'], $data);
+
+        if ($stmt1 && $stmt2 && $stmt3 && $stmt4) {
+            $_SESSION = array();
+            session_destroy();
+            return true;
+        }
+    } catch (Exception $e) {
+
         error_log('エラー発生:' . $e->getMessage());
         $err_msg['common'] = ERR_MSG;
     }
