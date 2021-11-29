@@ -130,7 +130,7 @@ function getMemo($memo_id)
     try {
 
         $dbh = dbConnect();
-        $sql = 'SELECT m.id, user_id, m.title, ideal, attempt, solution, reference, etc, m.created_at, is_solved, is_published, c.title AS category_title, user_name, profile_img
+        $sql = 'SELECT m.id AS id, user_id, m.title, ideal, attempt, solution, reference, etc, m.created_at, is_solved, is_published, c.title AS category_title, user_name, profile_img
         FROM memos AS m 
         INNER JOIN categories AS c 
         ON m.category_id = c.id 
@@ -236,5 +236,124 @@ function getSolvedMemos($user_id)
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
         $err_msg['common'] = ERR_MSG;
+    }
+}
+
+
+// お気に入りのメモを全て取得
+function getFavoriteMemos($user_id)
+{
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT id, title, m.created_at AS created_at 
+        FROM favorite_memos AS fm
+        INNER JOIN memos AS m
+        ON fm.memo_id = m.id
+        WHERE fm.user_id = :user_id';
+        $data = array(
+            ':user_id' => $user_id,
+        );
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+
+// いいねされているメモかチェック
+function checkFavoriteMemo($memo_id, $user_id)
+{
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT memo_id FROM favorite_memos WHERE memo_id = :memo_id AND user_id = :user_id';
+        $data = array(
+            ':memo_id' => $memo_id,
+            ':user_id' => $user_id,
+        );
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $resultCount = $stmt->rowCount();
+        return $resultCount;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+
+// お気に入りメモを新規登録
+function createFavoriteMemo($memo_id, $user_id)
+{
+
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'INSERT INTO favorite_memos (memo_id, user_id, created_at) VALUES (:memo_id, :user_id, :created_at)';
+        $data = array(
+            ':memo_id' => $memo_id,
+            ':user_id' => $user_id,
+            ':created_at' => date('Y-m-d H:i:s')
+        );
+
+        if (queryPost($dbh, $sql, $data)) {
+
+            return true;
+        }
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+
+// お気に入りメモを削除
+function deleteFavoriteMemo($memo_id, $user_id)
+{
+
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'DELETE FROM favorite_memos WHERE memo_id = :memo_id AND user_id = :user_id';
+        $data = array(
+            ':memo_id' => $memo_id,
+            ':user_id' => $user_id,
+        );
+
+        if (queryPost($dbh, $sql, $data)) {
+            return true;
+        }
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+// いいねされているかを確認し、されていなければactiveクラスをつける
+function isFavoriteMemo($memo_id, $user_id)
+{
+
+    try {
+        $dbh = dbConnect();
+        $sql = 'SELECT memo_id FROM favorite_memos WHERE memo_id = :memo_id AND user_id = :user_id';
+        $data = array(':memo_id' => $memo_id, ':user_id' => $user_id);
+        $stmt = queryPost($dbh, $sql, $data);
+
+        if ($stmt->rowCount()) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
     }
 }

@@ -41,14 +41,15 @@ require_once '../template/header.php';
                 <p><?= sanitize($memo['etc']); ?></p>
             </div>
             <div class="section_footer">
-
+                <button type="button" class="btn-favorite js-click-favorite <?php if (isFavoriteMemo($memo['id'], $_SESSION['user_id'])) echo 'active'; ?>" data-memoid="<?= sanitize($memo['id']); ?>">いいね</button>
             </div>
         </section>
     </div>
 
 </main>
 
-<script src="../resource/js/bundle.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="../resource/js/ajax_favorite_memo.js"></script>
 </body>
 
 </html>

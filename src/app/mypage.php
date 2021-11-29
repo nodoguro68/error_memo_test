@@ -11,6 +11,7 @@ $user_id = $_SESSION['user_id'];
 $folders = getFolders($user_id);
 $unsolved_memos = getUnsolvedMemos($user_id);
 $solved_memos = getSolvedMemos($user_id);
+$favorite_memos = getFavoriteMemos($user_id);
 $user_info = getUserInfo($user_id);
 
 if (!empty($_GET['folder_id'])) {
@@ -127,7 +128,17 @@ include '../template/header.php';
             <?php endif; ?>
         </ul>
 
-        <?php if(!empty($folder_id)): ?>
+        <ul class="memo-list">
+            <?php if (!empty($favorite_memos)) : ?>
+                <?php foreach ($favorite_memos as $memo) : ?>
+                    <li class="memo-list__item"><a href="memo_detail.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']); ?>/<?= sanitize($memo['created_at']); ?></a></li>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <li>メモがありません</li>
+            <?php endif; ?>
+        </ul>
+
+        <?php if (!empty($folder_id)) : ?>
             <a href="memo_form.php?folder_id=<?= sanitize($folder_id); ?>" class="">メモを追加する</a>
         <?php endif; ?>
     </div>
