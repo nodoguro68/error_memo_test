@@ -45,6 +45,7 @@ if (!empty($_POST['delete_folder'])) {
     $folder_id = filter_input(INPUT_POST, 'delete_folder');
 
     deleteFolder($folder_id, $user_id);
+    deleteMemosInFolder($folder_id);
 
     header('Location: mypage.php');
 }

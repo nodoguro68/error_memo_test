@@ -62,6 +62,47 @@ function editMemo($memo_data)
     }
 }
 
+
+// メモ削除
+function deleteMemo($memo_id)
+{
+    try {
+        $dbh = dbConnect();
+        $sql = 'DELETE FROM memos WHERE id = :memo_id AND is_deleted = 0';
+        $data = array(
+            ':memo_id' => $memo_id,
+        );
+
+        if (queryPost($dbh, $sql, $data)) {
+
+            return true;
+        }
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+// メモ削除
+function deleteMemosInFolder($folder_id)
+{
+    try {
+        $dbh = dbConnect();
+        $sql = 'DELETE FROM memos WHERE folder_id = :folder_id AND is_deleted = 0';
+        $data = array(
+            ':folder_id' => $folder_id,
+        );
+
+        if (queryPost($dbh, $sql, $data)) {
+
+            return true;
+        }
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
 // 自分のメモ取得
 function getMyMemo($memo_id, $user_id)
 {

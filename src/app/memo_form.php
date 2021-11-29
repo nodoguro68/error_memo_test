@@ -13,7 +13,7 @@ $db_form_data = (!empty($memo_id)) ? getMyMemo($memo_id, $user_id) : '';
 $editFlag = (!empty($db_form_data)) ? true : false;
 $categories = getCategories();
 
-if (!empty($_POST)) {
+if (!empty($_POST['edit_memo'])) {
 
     $memo_data = array(
         'id' => $memo_id,
@@ -30,40 +30,59 @@ if (!empty($_POST)) {
         'is_published' => $_POST['is_published'],
     );
 
-    if ($editFlag) {
-
-        if ($db_form_data['title'] !== $memo_data['title']) {
-            validRequired($memo_data['title'], 'title');
-        }
-        if ($db_form_data['is_published'] !== $memo_data['is_published']) {
-            validPublished($memo_data['is_published'], $memo_data['is_solved']);
-        }
-        if ($db_form_data['is_solved'] !== $memo_data['is_solved']) {
-            validSolved($memo_data['solution'], $memo_data['is_solved']);
-        }
-        if ($db_form_data['solution'] !== $memo_data['solution']) {
-            validSolved($memo_data['solution'], $memo_data['is_solved']);
-        }
-
-        if (empty($err_msg)) {
-
-            if (editMemo($memo_data)) {
-                header('Location: mypage.php?folder_id=' . $folder_id);
-            }
-        }
-    } else {
-
+    if ($db_form_data['title'] !== $memo_data['title']) {
         validRequired($memo_data['title'], 'title');
+    }
+    if ($db_form_data['is_published'] !== $memo_data['is_published']) {
         validPublished($memo_data['is_published'], $memo_data['is_solved']);
+    }
+    if ($db_form_data['is_solved'] !== $memo_data['is_solved']) {
         validSolved($memo_data['solution'], $memo_data['is_solved']);
+    }
+    if ($db_form_data['solution'] !== $memo_data['solution']) {
+        validSolved($memo_data['solution'], $memo_data['is_solved']);
+    }
 
+    if (empty($err_msg)) {
 
-        if (empty($err_msg)) {
-
-            if (createMemo($memo_data)) {
-                header('Location: mypage.php?folder_id=' . $folder_id);
-            }
+        if (editMemo($memo_data)) {
+            header('Location: mypage.php?folder_id=' . $folder_id);
         }
+    }
+}
+if (!empty($_POST['create_memo'])) {
+
+    $memo_data = array(
+        'id' => $memo_id,
+        'user_id' => $user_id,
+        'folder_id' => $folder_id,
+        'category_id' => $_POST['category_id'],
+        'title' => $_POST['title'],
+        'ideal' => $_POST['ideal'],
+        'attempt' => $_POST['attempt'],
+        'solution' => $_POST['solution'],
+        'reference' => $_POST['reference'],
+        'etc' => $_POST['etc'],
+        'is_solved' => $_POST['is_solved'],
+        'is_published' => $_POST['is_published'],
+    );
+
+    validRequired($memo_data['title'], 'title');
+    validPublished($memo_data['is_published'], $memo_data['is_solved']);
+    validSolved($memo_data['solution'], $memo_data['is_solved']);
+
+    if (empty($err_msg)) {
+
+        if (createMemo($memo_data)) {
+            header('Location: mypage.php?folder_id=' . $folder_id);
+        }
+    }
+}
+
+if (!empty($_POST['delete_memo'])) {
+
+    if (deleteMemo($memo_id)) {
+        header('Location: mypage.php?folder_id=' . $folder_id);
     }
 }
 
@@ -77,9 +96,10 @@ include '../template/header.php';
 
         <a href="mypage.php?folder_id=<?= sanitize($folder_id); ?>" class="">＜ フォルダ</a>
 
-        <form method="post" class="form" enctype="multipart/form-data">
+        <form method="post" class="form">
             <div class="form__header">
                 <h2 class="form__title"><?= ($editFlag) ? 'メモ編集' : 'メモ新規登録'; ?></h2>
+                <button type="submit" name="delete_memo" value="<?= $memo_id; ?>">削除</button>
                 <?php include '../template/err_msg_area.php' ?>
             </div>
             <div class="form__body">
@@ -107,7 +127,8 @@ include '../template/header.php';
                     <select name="category_id" id="category" class="form__select">
                         <?php if (!empty($categories)) : ?>
                             <?php foreach ($categories as $category) : ?>
-                                <option value="<?= sanitize($category['id']); ?>" <?php if (getFormData('category_id') === $category['id']) echo 'selected'; ?>><?= sanitize($category['title']); ?></option>
+                                <option value="<?= sanitize($category['id']); ?>" <?php if ((int)getFormData('category_id') === $category['id']) echo 'selected'; ?>><?= sanitize($category['title']); ?></option>
+                                <?= var_dump($category['id']); ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
@@ -145,7 +166,7 @@ include '../template/header.php';
                 </div>
                 <div class="form__footer">
                     <div class="btn-container">
-                        <input type="submit" value="<?= ($editFlag) ? '編集' : '保存'; ?>" class="btn">
+                        <input type="submit" name="<?= ($editFlag) ? 'edit_memo' : 'create_memo'; ?>" value="<?= ($editFlag) ? '編集' : '保存'; ?>" class="btn">
                     </div>
                 </div>
             </div>
