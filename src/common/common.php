@@ -118,3 +118,15 @@ function getErrMsg($key)
         return $err_msg[$key];
     }
 }
+
+
+// 認証キー生成
+function createRandomKey($length = 8)
+{
+    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJLKMNOPQRSTUVWXYZ0123456789';
+    $str = '';
+    for ($i = 0; $i < $length; ++$i) {
+        $str .= $chars[mt_rand(0, 61)];
+    }
+    return $str;
+}

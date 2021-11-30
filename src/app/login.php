@@ -59,7 +59,7 @@ include '../template/header.php';
                     <input type="submit" value="ログイン" class="btn">
                 </div>
                 <div class="link-container">
-                    <a href="pass_remind_send.php" class="form__link">パスワードを忘れた場合はこちら</a>
+                    <a href="pass_reissue_send.php" class="form__link">パスワードを忘れた場合はこちら</a>
                     <a href="signup.php" class="form__link">新規登録はこちら</a>
                 </div>
             </div>

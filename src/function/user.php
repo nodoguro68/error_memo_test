@@ -210,3 +210,46 @@ function signout($user_id)
         $err_msg['common'] = ERR_MSG;
     }
 }
+
+// メールアドレスが存在するかチェック
+function checkMailAddress($mail_address)
+{
+
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT count(*) FROM users WHERE mail_address = :mail_address AND is_deleted = 0';
+        $data = array(':mail_address' => $mail_address);
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+
+// パスワード再発行
+function reissuePass($mail_address, $password)
+{
+    try {
+
+        $dbh = dbConnect();
+        $sql = 'UPDATE users SET password = :password WHERE mail_address = :mail_address AND is_deleted = 0';
+        $data = array(
+            ':mail_address' => $mail_address,
+            ':password' => password_hash($password, PASSWORD_DEFAULT),
+        );
+
+        if (queryPost($dbh, $sql, $data)) {
+
+            return true;
+        }
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
