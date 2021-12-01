@@ -5,8 +5,14 @@ require_once '../function/memo.php';
 
 if (!empty($_GET['memo_id'])) {
 
+    
     $memo_id = filter_input(INPUT_GET, 'memo_id');
     $memo = getMemo($memo_id);
+
+    if(empty($memo)) {
+        header('Location: 404.php');
+    }
+
     $created_at = substr(sanitize($memo['created_at']), 0, 10);
 }
 

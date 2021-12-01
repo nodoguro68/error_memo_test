@@ -160,12 +160,12 @@ function updateProfile($user_id, $user_name, $description, $mail_address, $profi
 
 
 // ユーザー情報取得
-function getUserInfo($user_id)
+function getUserInfo($user_id, $column)
 {
     try {
 
         $dbh = dbConnect();
-        $sql = 'SELECT user_name, description, profile_img FROM users WHERE id = :user_id AND is_deleted = 0';
+        $sql = 'SELECT '.$column. ' FROM users WHERE id = :user_id AND is_deleted = 0';
         $data = array(':user_id' => $user_id);
 
         $stmt = queryPost($dbh, $sql, $data);

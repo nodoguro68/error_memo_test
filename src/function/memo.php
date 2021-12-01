@@ -247,11 +247,34 @@ function getFavoriteMemos($user_id)
 
         $dbh = dbConnect();
 
-        $sql = 'SELECT id, title, m.created_at AS created_at 
+        $sql = 'SELECT m.id AS id, m.user_id AS user_id, title, m.created_at AS created_at, user_name
         FROM favorite_memos AS fm
         INNER JOIN memos AS m
         ON fm.memo_id = m.id
+        INNER JOIN users AS u
+        ON m.user_id = u.id
         WHERE fm.user_id = :user_id';
+        $data = array(
+            ':user_id' => $user_id,
+        );
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
+    }
+}
+
+// ユーザーのメモ全て取得
+function getUsersMemos($user_id)
+{
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT id, title, created_at FROM memos WHERE user_id = :user_id AND is_deleted = 0';
         $data = array(
             ':user_id' => $user_id,
         );

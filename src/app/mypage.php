@@ -12,7 +12,8 @@ $folders = getFolders($user_id);
 $unsolved_memos = getUnsolvedMemos($user_id);
 $solved_memos = getSolvedMemos($user_id);
 $favorite_memos = getFavoriteMemos($user_id);
-$user_info = getUserInfo($user_id);
+$db_column = 'user_name, profile_img';
+$user_info = getUserInfo($user_id, $db_column);
 
 if (!empty($_GET['folder_id'])) {
 
