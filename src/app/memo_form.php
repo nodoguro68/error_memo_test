@@ -106,7 +106,7 @@ include '../template/header.php';
                 <!-- エラータイトル -->
                 <div class="form__item">
                     <label for="title" class="form__label">エラータイトル</label>
-                    <input type="text" name="title" class="form__input" id="title" value="<?= getFormData('title'); ?>">
+                    <input type="text" name="title" class="form__input" id="title" value="<?= getFormData('title'); ?>" autofocus>
                     <span class="err-msg"><?= getErrMsg('title'); ?></span>
                 </div>
                 <!-- 公開するかどうか -->
@@ -128,7 +128,6 @@ include '../template/header.php';
                         <?php if (!empty($categories)) : ?>
                             <?php foreach ($categories as $category) : ?>
                                 <option value="<?= sanitize($category['id']); ?>" <?php if ((int)getFormData('category_id') === $category['id']) echo 'selected'; ?>><?= sanitize($category['title']); ?></option>
-                                <?= var_dump($category['id']); ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>

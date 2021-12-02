@@ -380,3 +380,103 @@ function isFavoriteMemo($memo_id, $user_id)
         error_log('エラー発生:' . $e->getMessage());
     }
 }
+
+
+// メモ検索
+function searchMemo($q, $category_id, $sort)
+{
+    global $err_msg;
+    if($q) {
+        if($sort === 'new' || $sort === '0') {
+            $sort = 'DESC';
+            
+        } elseif($sort === 'old'){
+            $sort = 'ASC';
+    
+        }
+        try {
+    
+            $dbh = dbConnect();
+    
+            if ($category_id != '0') {
+                $sql = "SELECT id, user_id, title, created_at 
+                FROM memos 
+                WHERE category_id = :category_id AND title LIKE '%" . $q . "%' AND is_published = 1 AND is_deleted = 0 ORDER BY created_at $sort";
+                $data = array(
+                    ':category_id' => $category_id,
+                );
+                $stmt = queryPost($dbh, $sql, $data);
+    
+            } else {
+                $sql = "SELECT id, user_id, title, created_at 
+                FROM memos 
+                WHERE title LIKE '%" . $q . "%' AND is_published = 1 AND is_deleted = 0 ORDER BY created_at $sort";
+                $stmt = $dbh->query($sql);
+            }
+    
+            $result = array(
+                'memo' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+                'count' => $stmt->rowCount()
+            );
+            return $result;
+        } catch (Exception $e) {
+            error_log('エラー発生:' . $e->getMessage());
+            $err_msg['common'] = ERR_MSG;
+        }
+    } else {
+        $result = array(
+            'memo' => null,
+            'count' => null
+        );
+    }
+}
+
+// 自分のメモ検索
+function searchMyMemo($user_id, $q, $category_id, $sort)
+{
+    global $err_msg;
+    if($q) {
+        if ($sort === 'new' || $sort === '0') {
+            $sort = 'DESC';
+        } elseif ($sort === 'old') {
+            $sort = 'ASC';
+        }
+        
+        try {
+
+            $dbh = dbConnect();
+
+            if($category_id !== '0') {
+                $sql = "SELECT id, user_id, title, created_at, is_solved
+                FROM memos 
+                WHERE user_id = :user_id AND category_id = :category_id AND title LIKE '%" . $q . "%' AND is_deleted = 0 ORDER BY created_at $sort";
+                $data = array(
+                    ':user_id' => $user_id,
+                    ':category_id' => $category_id,
+                );
+            } else {
+                $sql = "SELECT id, user_id, title, created_at 
+                FROM memos 
+                WHERE user_id = :user_id AND title LIKE '%" . $q . "%' AND is_published = 1 AND is_deleted = 0 ORDER BY created_at $sort";
+                $data = array(
+                    ':user_id' => $user_id,
+                );
+            }
+
+            $stmt = queryPost($dbh, $sql, $data);
+            $result = array(
+                'memo' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+                'count' => $stmt->rowCount()
+            );
+            return $result;
+        } catch (Exception $e) {
+            error_log('エラー発生:' . $e->getMessage());
+            $err_msg['common'] = ERR_MSG;
+        }
+    } else {
+        $result = array(
+            'memo' => null,
+            'count' => null
+        );
+    }
+}
