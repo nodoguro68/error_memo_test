@@ -10,6 +10,8 @@ if (!empty($_GET['user_id'])) {
     $user_info = getUserInfo($user_id, $db_column);
     $memos = getUsersMemos($user_id);
     $favorite_memos = getFavoriteMemos($user_id);
+
+    var_dump($memos);
 }
 
 
@@ -46,8 +48,8 @@ require_once '../template/header.php';
             <div class="section_body">
                 <!-- ユーザーのメモ -->
                 <ul class="memo-list">
-                    <?php if (!empty($memos)) : ?>
-                        <?php foreach ($memos as $memo) : ?>
+                    <?php if (!empty($memos['memo'])) : ?>
+                        <?php foreach ($memos['memo'] as $memo) : ?>
                             <li class="memo-list__item"><a href="memo_detail.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']); ?></a></li>
                         <?php endforeach; ?>
                     <?php else : ?>
@@ -57,8 +59,8 @@ require_once '../template/header.php';
 
                 <!-- ユーザーのお気に入りメモ -->
                 <ul class="">
-                    <?php if (!empty($favorite_memos)) : ?>
-                        <?php foreach ($favorite_memos as $memo) : ?>
+                    <?php if (!empty($favorite_memos['memo'])) : ?>
+                        <?php foreach ($favorite_memos['memo'] as $memo) : ?>
                             <li class="memo-list__item">
                                 <?php if ($_SESSION['user_id'] === $memo['user_id']) : ?>
                                     <a href="memo_form.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']) . '/' . sanitize($memo['user_name']) . '/' . sanitize($memo['created_at']); ?></a>

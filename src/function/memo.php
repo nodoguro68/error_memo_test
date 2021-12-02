@@ -164,7 +164,10 @@ function getMemos()
         WHERE is_published = 1 AND m.is_deleted = 0';
         $stmt = $dbh->query($sql);
 
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = array(
+            'memo' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+            'count' => $stmt->rowCount()
+        );
         return $result;
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
@@ -187,7 +190,10 @@ function getMemoInFolder($user_id, $folder_id)
         );
 
         $stmt = queryPost($dbh, $sql, $data);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = array(
+            'memo' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+            'count' => $stmt->rowCount()
+        );
         return $result;
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
@@ -209,7 +215,10 @@ function getUnsolvedMemos($user_id)
         );
 
         $stmt = queryPost($dbh, $sql, $data);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = array(
+            'memo' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+            'count' => $stmt->rowCount()
+        );
         return $result;
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
@@ -231,7 +240,10 @@ function getSolvedMemos($user_id)
         );
 
         $stmt = queryPost($dbh, $sql, $data);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = array(
+            'memo' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+            'count' => $stmt->rowCount()
+        );
         return $result;
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
@@ -259,7 +271,10 @@ function getFavoriteMemos($user_id)
         );
 
         $stmt = queryPost($dbh, $sql, $data);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = array(
+            'memo' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+            'count' => $stmt->rowCount()
+        );
         return $result;
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
@@ -280,7 +295,10 @@ function getUsersMemos($user_id)
         );
 
         $stmt = queryPost($dbh, $sql, $data);
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = array(
+            'memo' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+            'count' => $stmt->rowCount()
+        );
         return $result;
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
@@ -478,5 +496,27 @@ function searchMyMemo($user_id, $q, $category_id, $sort)
             'memo' => null,
             'count' => null
         );
+    }
+}
+
+
+// いいね件数取得
+function countFavoriteMemo($memo_id)
+{
+    try {
+
+        $dbh = dbConnect();
+
+        $sql = 'SELECT count(*) FROM favorite_memos WHERE memo_id = :memo_id AND is_deleted = 0';
+        $data = array(
+            ':memo_id' => $memo_id
+        );
+
+        $stmt = queryPost($dbh, $sql, $data);
+        $result = $stmt->fetchColumn();
+        return $result;
+    } catch (Exception $e) {
+        error_log('エラー発生:' . $e->getMessage());
+        $err_msg['common'] = ERR_MSG;
     }
 }

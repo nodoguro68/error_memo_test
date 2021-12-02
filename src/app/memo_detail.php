@@ -8,6 +8,7 @@ if (!empty($_GET['memo_id'])) {
     
     $memo_id = filter_input(INPUT_GET, 'memo_id');
     $memo = getMemo($memo_id);
+    $memo_count = countFavoriteMemo($memo_id);
 
     if(empty($memo)) {
         header('Location: 404.php');
@@ -48,6 +49,9 @@ require_once '../template/header.php';
             </div>
             <div class="section_footer">
                 <button type="button" class="btn-favorite js-click-favorite <?php if (isFavoriteMemo($memo['id'], $_SESSION['user_id'])) echo 'active'; ?>" data-memoid="<?= sanitize($memo['id']); ?>">いいね</button>
+                <div class="count-area">
+                    <span class="count"><?= $memo_count; ?></span>
+                </div>
             </div>
         </section>
     </div>

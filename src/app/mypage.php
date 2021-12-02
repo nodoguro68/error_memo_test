@@ -63,7 +63,6 @@ if (!empty($_GET['q'])) {
     if (empty($err_msg)) {
 
         $search_result = searchMyMemo($user_id, $q, $category_id, $sort);
-
     }
 }
 
@@ -96,6 +95,18 @@ include '../template/header.php';
             <li class=""><a href="signout.php" class="">退会</a></li>
         </ul>
 
+        <div class="count-area">
+            <span class="count">
+                <?php if (!empty($search_result)) : ?>
+                    <?= $search_result['count']; ?>
+                <?php else : ?>
+                    <?= $memos['count']; ?>
+                    <?= $unsolved_memos['count']; ?>
+                    <?= $solved_memos['count']; ?>
+                    <?= $favorite_memos['count']; ?>
+                <?php endif; ?>
+            </span>件
+        </div>
 
         <!-- フォルダ -->
         <ul class="">
@@ -125,8 +136,8 @@ include '../template/header.php';
             </div>
             <div class="section__body">
                 <ul class="memo-list">
-                    <?php if (!empty($memos)) : ?>
-                        <?php foreach ($memos as $memo) : ?>
+                    <?php if (!empty($memos['memo'])) : ?>
+                        <?php foreach ($memos['memo'] as $memo) : ?>
                             <li class="memo-list__item"><a href="memo_form.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']); ?></a></li>
                         <?php endforeach; ?>
                     <?php else : ?>
@@ -143,8 +154,8 @@ include '../template/header.php';
 
         <!-- 未解決 -->
         <ul class="memo-list">
-            <?php if (!empty($unsolved_memos)) : ?>
-                <?php foreach ($unsolved_memos as $memo) : ?>
+            <?php if (!empty($unsolved_memos['memo'])) : ?>
+                <?php foreach ($unsolved_memos['memo'] as $memo) : ?>
                     <li class="memo-list__item"><a href="memo_form.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']); ?></a></li>
                 <?php endforeach; ?>
             <?php else : ?>
@@ -154,8 +165,8 @@ include '../template/header.php';
 
         <!-- 解決済み -->
         <ul class="memo-list">
-            <?php if (!empty($solved_memos)) : ?>
-                <?php foreach ($solved_memos as $memo) : ?>
+            <?php if (!empty($solved_memos['memo'])) : ?>
+                <?php foreach ($solved_memos['memo'] as $memo) : ?>
                     <li class="memo-list__item"><a href="memo_form.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']); ?></a></li>
                 <?php endforeach; ?>
             <?php else : ?>
@@ -165,8 +176,8 @@ include '../template/header.php';
 
         <!-- お気に入り -->
         <ul class="memo-list">
-            <?php if (!empty($favorite_memos)) : ?>
-                <?php foreach ($favorite_memos as $memo) : ?>
+            <?php if (!empty($favorite_memos['memo'])) : ?>
+                <?php foreach ($favorite_memos['memo'] as $memo) : ?>
                     <li class="memo-list__item"><a href="memo_detail.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']); ?>/<?= sanitize($memo['created_at']); ?></a></li>
                 <?php endforeach; ?>
             <?php else : ?>
@@ -199,7 +210,7 @@ include '../template/header.php';
                     <a href="memo_form.php?memo_id=<?= sanitize($result['id']); ?>" class="memo-list__link"><?= sanitize($result['title']) . '/' . sanitize($result['created_at']); ?></a>
                 </li>
             <?php endforeach; ?>
-        <?php elseif(count($search_result['memo']) == 0 && !empty($_GET['search'])): ?>
+        <?php elseif (count($search_result['memo']) == 0 && !empty($_GET['search'])) : ?>
             <li>検索結果がありません</li>
         <?php endif; ?>
 

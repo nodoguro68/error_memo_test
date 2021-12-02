@@ -10,9 +10,9 @@ if (isset($_POST['memoId']) && isset($_SESSION['user_id'])) {
 
     try {
 
-        $resultCount = checkFavoriteMemo($memo_id, $user_id);
+        $result_count = checkFavoriteMemo($memo_id, $user_id);
 
-        if (!empty($resultCount)) {
+        if (!empty($result_count)) {
 
             deleteFavoriteMemo($memo_id, $user_id);
 
@@ -21,6 +21,9 @@ if (isset($_POST['memoId']) && isset($_SESSION['user_id'])) {
             createFavoriteMemo($memo_id, $user_id);
             
         }
+        
+        echo $memo_count = countFavoriteMemo($memo_id);
+
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
         $err_msg['common'] = ERR_MSG;

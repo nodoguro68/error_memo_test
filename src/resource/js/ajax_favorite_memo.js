@@ -2,6 +2,7 @@ $(function() {
     
     const favoriteBtn = document.querySelector('.js-click-favorite') || null;
     let = favoriteMemoId = favoriteBtn.dataset.memoid || null;
+    const favoriteNum = document.querySelector('.count');
 
     if(favoriteMemoId !== undefined && favoriteMemoId !== null) {
 
@@ -17,6 +18,7 @@ $(function() {
                 }
             }).done(function(data){
                 that.classList.toggle('active');
+                favoriteNum.innerHTML = data;
             }).fail(function(msg){
                 console.log('Ajax error');
             });

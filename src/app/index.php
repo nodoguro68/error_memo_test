@@ -14,7 +14,7 @@ $categories = getCategories();
 
 if (!empty($_GET['q'])) {
 
-    $q = ($_GET['q'] !== ' ' ? trim(filter_input(INPUT_GET, 'q')) : false );
+    $q = ($_GET['q'] !== ' ' ? trim(filter_input(INPUT_GET, 'q')) : false);
     $category_id = filter_input(INPUT_GET, 'category_id');
     $sort = filter_input(INPUT_GET, 'sort');
 
@@ -55,9 +55,20 @@ include '../template/header.php';
             </div>
             <div class="section__body">
                 <?php include '../template/err_msg_area.php'; ?>
+
+                <div class="count-area">
+                    <span class="count">
+                        <?php if (!empty($search_result)) : ?>
+                            <?= $search_result['count']; ?>
+                        <?php else : ?>
+                            <?= $memos['count']; ?>
+                        <?php endif; ?>
+                    </span>件
+                </div>
+
                 <ul class="memo-list">
 
-                    <?php if (count($search_result['memo']) > 0) : ?>
+                    <?php if (!empty($search_result['memo'])) : ?>
                         <?php foreach ($search_result['memo'] as $result) : ?>
                             <li class="memo-list__item">
                                 <?php if ($user_id === $result['user_id']) : ?>
@@ -69,10 +80,10 @@ include '../template/header.php';
                         <?php endforeach; ?>
                     <?php endif; ?>
                     /
-                    <?php if (!empty($memos)) : ?>
-                        <?php foreach ($memos as $memo) : ?>
+                    <?php if (!empty($memos['memo'])) : ?>
+                        <?php foreach ($memos['memo'] as $memo) : ?>
                             <li class="memo-list__item">
-                                <?php if ($user_id === $memo['user_id']) : ?>
+                                <?php if ($user_id === (int)$memo['user_id']) : ?>
                                     <a href="memo_form.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']) . '/' . sanitize($memo['user_name']) . '/' . sanitize($memo['created_at']); ?></a>
                                 <?php else : ?>
                                     <a href="memo_detail.php?memo_id=<?= sanitize($memo['id']); ?>" class="memo-list__link"><?= sanitize($memo['title']) . '/' . sanitize($memo['user_name']) . '/' . sanitize($memo['created_at']); ?></a>
