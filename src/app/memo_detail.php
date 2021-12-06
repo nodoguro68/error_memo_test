@@ -44,6 +44,7 @@ require_once '../template/header.php';
                 <p><?= sanitize($memo['ideal']); ?></p>
                 <p><?= sanitize($memo['attempt']); ?></p>
                 <p><?= sanitize($memo['solution']); ?></p>
+                <p><?= sanitize($memo['cause']); ?></p>
                 <p><?= sanitize($memo['reference']); ?></p>
                 <p><?= sanitize($memo['etc']); ?></p>
             </div>

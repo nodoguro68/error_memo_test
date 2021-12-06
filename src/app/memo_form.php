@@ -24,6 +24,7 @@ if (!empty($_POST['edit_memo'])) {
         'ideal' => $_POST['ideal'],
         'attempt' => $_POST['attempt'],
         'solution' => $_POST['solution'],
+        'cause' => $_POST['cause'],
         'reference' => $_POST['reference'],
         'etc' => $_POST['etc'],
         'is_solved' => $_POST['is_solved'],
@@ -150,6 +151,12 @@ include '../template/header.php';
                     <label for="solution" class="form__label">解決方法</label>
                     <textarea name="solution" id="solution" class="form__textarea"><?= getFormData('solution'); ?></textarea>
                     <span class="err-msg"><?= getErrMsg('solution'); ?></span>
+                </div>
+                <!-- 原因 -->
+                <div class="form__item">
+                    <label for="cause" class="form__label">原因</label>
+                    <textarea name="cause" id="cause" class="form__textarea"><?= getFormData('cause'); ?></textarea>
+                    <span class="err-msg"><?= getErrMsg('cause'); ?></span>
                 </div>
                 <!-- 参考 -->
                 <div class="form__item">
