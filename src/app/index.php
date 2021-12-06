@@ -15,8 +15,7 @@ if(!is_int((int)$current_page_num)) {
     header('Location: index.php');
 }
 
-// 表示件数
-$per_page = 1;
+$per_page = 20;
 $current_min_num = (($current_page_num - 1)*$per_page);
 $memos = getMemos($current_min_num, $per_page);
 
@@ -109,7 +108,9 @@ include '../template/header.php';
             <div class="section__footer"></div>
         </section>
 
-        <?php pagination($current_page_num, $memos['total_page']); ?>
+        <?php if(!empty($memos)): ?>
+            <?php pagination($current_page_num, $memos['total_page']); ?>
+        <?php endif; ?>
 
     </div>
 
