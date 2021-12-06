@@ -98,12 +98,12 @@ include '../template/header.php';
         <div class="count-area">
             <span class="count">
                 <?php if (!empty($search_result)) : ?>
-                    <?= $search_result['count']; ?>
+                    <?= sanitize($search_result['count']); ?>
                 <?php else : ?>
-                    <?= $memos['count']; ?>
-                    <?= $unsolved_memos['count']; ?>
-                    <?= $solved_memos['count']; ?>
-                    <?= $favorite_memos['count']; ?>
+                    <?= sanitize($memos['count']); ?>
+                    <?= sanitize($unsolved_memos['count']); ?>
+                    <?= sanitize($solved_memos['count']); ?>
+                    <?= sanitize($favorite_memos['count']); ?>
                 <?php endif; ?>
             </span>件
         </div>

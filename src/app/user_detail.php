@@ -11,7 +11,6 @@ if (!empty($_GET['user_id'])) {
     $memos = getUsersMemos($user_id);
     $favorite_memos = getFavoriteMemos($user_id);
 
-    var_dump($memos);
 }
 
 

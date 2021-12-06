@@ -3,13 +3,24 @@
 require_once '../common/common.php';
 require_once '../common/validation.php';
 require_once '../common/auth.php';
+require_once '../common/pagination.php';
 require_once '../function/user.php';
 require_once '../function/category.php';
 require_once '../function/folder.php';
 require_once '../function/memo.php';
 
+$current_page_num = (!empty($_GET['p']) ? filter_input(INPUT_GET, 'p'): 1);
+
+if(!is_int((int)$current_page_num)) {
+    header('Location: index.php');
+}
+
+// 表示件数
+$per_page = 1;
+$current_min_num = (($current_page_num - 1)*$per_page);
+$memos = getMemos($current_min_num, $per_page);
+
 $user_id = (int)$_SESSION['user_id'];
-$memos = getMemos();
 $categories = getCategories();
 
 if (!empty($_GET['q'])) {
@@ -59,9 +70,9 @@ include '../template/header.php';
                 <div class="count-area">
                     <span class="count">
                         <?php if (!empty($search_result)) : ?>
-                            <?= $search_result['count']; ?>
+                            <?= sanitize($search_result['count']); ?>
                         <?php else : ?>
-                            <?= $memos['count']; ?>
+                            <?= sanitize($memos['count']); ?>
                         <?php endif; ?>
                     </span>件
                 </div>
@@ -97,6 +108,8 @@ include '../template/header.php';
             </div>
             <div class="section__footer"></div>
         </section>
+
+        <?php pagination($current_page_num, $memos['total_page']); ?>
 
     </div>
 

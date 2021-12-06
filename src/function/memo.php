@@ -151,23 +151,35 @@ function getMemo($memo_id)
 }
 
 // 全てのメモ取得
-function getMemos()
+function getMemos($current_min_num = 1, $per_page = 20)
 {
     try {
 
         $dbh = dbConnect();
 
+        $sql = 'SELECT id FROM memos WHERE is_published = 1 AND is_deleted = 0';
+        $data = array();
+        $stmt = queryPost($dbh, $sql, $data);
+
+        $result['total'] = $stmt->rowCount();
+        $result['total_page'] =
+        ceil($result['total'] / $per_page);
+
         $sql = 'SELECT m.id, user_id, title, m.created_at AS created_at, user_name 
         FROM memos AS m
         INNER JOIN users AS u
         ON m.user_id = u.id 
-        WHERE is_published = 1 AND m.is_deleted = 0';
-        $stmt = $dbh->query($sql);
-
-        $result = array(
-            'memo' => $stmt->fetchAll(PDO::FETCH_ASSOC),
-            'count' => $stmt->rowCount()
+        WHERE is_published = 1 AND m.is_deleted = 0
+        LIMIT :per_page OFFSET :current_min_num';
+        $data = array(
+            ':current_min_num' => $current_min_num,
+            ':per_page' => $per_page,
         );
+        $stmt = queryPost($dbh, $sql, $data);
+
+        $result['memo'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result['count'] = $stmt->rowCount();
+
         return $result;
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
