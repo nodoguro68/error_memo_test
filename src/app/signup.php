@@ -28,7 +28,7 @@ if (!empty($_POST)) {
 
         if (empty($err_msg)) {
 
-            createUser($user_name, $mail_address, $password);
+            signup($user_name, $mail_address, $password);
             header('Location: mypage.php');
         }
     }

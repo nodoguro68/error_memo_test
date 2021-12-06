@@ -80,6 +80,7 @@ function deleteFolder($folder_id, $user_id)
         );
 
         if (queryPost($dbh, $sql, $data)) {
+            $_SESSION['suc_msg'] = SUC_MSG_FOLDER_DELETE;
             return true;
         }
     } catch (Exception $e) {

@@ -22,7 +22,7 @@ function createMemo($memo_data)
         );
 
         if (queryPost($dbh, $sql, $data)) {
-
+            $_SESSION['suc_msg'] = SUC_MSG_MEMO_SAVE;
             return true;
         }
     } catch (Exception $e) {
@@ -53,7 +53,7 @@ function editMemo($memo_data)
         );
 
         if (queryPost($dbh, $sql, $data)) {
-
+            $_SESSION['suc_msg'] = SUC_MSG_MEMO_SAVE;
             return true;
         }
     } catch (Exception $e) {
@@ -74,7 +74,7 @@ function deleteMemo($memo_id)
         );
 
         if (queryPost($dbh, $sql, $data)) {
-
+            $_SESSION['suc_msg'] = SUC_MSG_MEMO_DELETE;
             return true;
         }
     } catch (Exception $e) {

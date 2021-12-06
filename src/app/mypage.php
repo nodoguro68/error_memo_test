@@ -72,6 +72,11 @@ include '../template/header.php';
 ?>
 
 <main class="main">
+    <div class="">
+        <?= sanitize(getSessionMessage('login_msg')); ?>
+        <?= sanitize(getSessionMessage('suc_msg')); ?>
+    </div>
+
     <div class="container">
 
         <ul class="tab-menu">
@@ -100,10 +105,11 @@ include '../template/header.php';
                 <?php if (!empty($search_result)) : ?>
                     <?= sanitize($search_result['count']); ?>
                 <?php else : ?>
-                    <?= sanitize($memos['count']); ?>
-                    <?= sanitize($unsolved_memos['count']); ?>
-                    <?= sanitize($solved_memos['count']); ?>
-                    <?= sanitize($favorite_memos['count']); ?>
+                    <?= (!empty($memos)) ? sanitize($memos['count']) : 0; ?>
+                    <?= (!empty($unsolved_memos)) ? sanitize($unsolved_memos['count']) : 0; ?>
+                    <?= (!empty($solved_memos)) ? sanitize($solved_memos['count']) : 0; ?>
+                    <?= (!empty($favorite_memos)) ? sanitize($favorite_memos['count']) : 0; ?>
+
                 <?php endif; ?>
             </span>件
         </div>
@@ -204,13 +210,13 @@ include '../template/header.php';
             <input type="submit" value="検索">
         </form>
 
-        <?php if (count($search_result['memo']) > 0) : ?>
+        <?php if (!empty($search_result)) : ?>
             <?php foreach ($search_result['memo'] as $result) : ?>
                 <li class="memo-list__item">
                     <a href="memo_form.php?memo_id=<?= sanitize($result['id']); ?>" class="memo-list__link"><?= sanitize($result['title']) . '/' . sanitize($result['created_at']); ?></a>
                 </li>
             <?php endforeach; ?>
-        <?php elseif (count($search_result['memo']) == 0 && !empty($_GET['search'])) : ?>
+        <?php elseif ((!empty($search_result)) && !empty($_GET['search'])) : ?>
             <li>検索結果がありません</li>
         <?php endif; ?>
 

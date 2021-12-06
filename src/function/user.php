@@ -1,7 +1,7 @@
 <?php
 
 // ユーザー登録
-function createUser($user_name, $mail_address, $password)
+function signup($user_name, $mail_address, $password)
 {
     try {
         $dbh = dbConnect();
@@ -20,6 +20,7 @@ function createUser($user_name, $mail_address, $password)
             $_SESSION['login_date'] = time();
             $_SESSION['login_limit'] = $session_limit;
             $_SESSION['user_id'] = $dbh->lastInsertId();
+            $_SESSION['suc_msg'] = SUC_MSG_SIGNUP;
         }
     } catch (Exception $e) {
         error_log('エラー発生:' . $e->getMessage());
@@ -65,6 +66,7 @@ function login($mail_address, $password, $pass_save)
             $_SESSION['login_limit'] = $sesLimit;
         }
         $_SESSION['user_id'] = $user_data['id'];
+        $_SESSION['login_msg'] = SUC_MSG_LOGIN;
 
         return true;
     } else {
@@ -103,7 +105,7 @@ function updatePass($user_id, $new_password)
         );
 
         if (queryPost($dbh, $sql, $data)) {
-
+            $_SESSION['suc_msg'] = SUC_MSG_PASS_UPDATE;
             return true;
         }
     } catch (Exception $e) {
@@ -149,7 +151,7 @@ function updateProfile($user_id, $user_name, $description, $mail_address, $profi
         );
 
         if (queryPost($dbh, $sql, $data)) {
-
+            $_SESSION['suc_msg'] = SUC_MSG_PROFILE_EDIT;
             return true;
         }
     } catch (Exception $e) {
@@ -165,7 +167,7 @@ function getUserInfo($user_id, $column)
     try {
 
         $dbh = dbConnect();
-        $sql = 'SELECT '.$column. ' FROM users WHERE id = :user_id AND is_deleted = 0';
+        $sql = 'SELECT ' . $column . ' FROM users WHERE id = :user_id AND is_deleted = 0';
         $data = array(':user_id' => $user_id);
 
         $stmt = queryPost($dbh, $sql, $data);

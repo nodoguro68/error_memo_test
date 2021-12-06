@@ -130,3 +130,13 @@ function createRandomKey($length = 8)
     }
     return $str;
 }
+
+// セッションメッセージを取得して初期化する
+function getSessionMessage($key)
+{
+    if (!empty($_SESSION[$key])) {
+        $message = $_SESSION[$key];
+        $_SESSION[$key] = '';
+        return $message;
+    }
+}

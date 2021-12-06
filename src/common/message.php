@@ -17,7 +17,12 @@ define('ERR_MSG_AUTH', 'メールアドレスまたはパスワードが違い�
 define('ERR_MSG_PUBLISH', '未解決の状態で公開することはできません');
 define('ERR_MSG_SOLVED', '解決方法が入力されていません');
 define('ERR_MSG_EXPIRE', '有効期限が切れています');
+define('SUC_MSG_SIGNUP', 'ユーザー登録しました');
 define('SUC_MSG_LOGIN', 'ログインしました');
+define('SUC_MSG_LOGOUT', 'ログアウトしました');
 define('SUC_MSG_MAIL', 'メールを送信しました');
 define('SUC_MSG_PASS_UPDATE', 'パスワードを変更しました');
 define('SUC_MSG_PROFILE_EDIT', 'プロフィールを変更しました');
+define('SUC_MSG_MEMO_SAVE', 'メモを保存しました');
+define('SUC_MSG_MEMO_DELETE', 'メモを削除しました');
+define('SUC_MSG_FOLDER_DELETE', 'フォルダを削除しました');
